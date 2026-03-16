@@ -1,0 +1,10 @@
+{
+    "name": "mirrosa-kiosk",
+    "version": "0.1.0",
+    "private": true,
+    "description": "Silver Sidewalk — Mirrosa AI storefront kiosk POC",
+    "scripts": {
+          "dev": "npx serve public -l 3001 --cors",
+          "start": "npx serve public -l 3001 --cors"
+    }
+}
