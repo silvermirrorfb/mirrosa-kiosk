@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Silver Mirror â Skin Analysis</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
+<style>
+  :root {
+    --blue: #2BA5DE;
+    --blue-light: #CCE6F7;
+    --blue-glow: rgba(43, 165, 222, 0.3);
+    --gold: #FFE276;
+    --dark: #0a0e14;
+    --dark-card: #111820;
+    --text: #f0f2f5;
+    --text-muted: #8a95a5;
+    --serif: 'Cormorant Garamond', Georgia, serif;
+    --sans: 'DM Sans', system-ui, sans-serif;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--dark);
+    color: var(--text);
+    font-family: var(--sans);
+    cursor: none;
+    user-select: none;
+  }
+
+  /* âââ GLOBAL LAYOUT âââ */
+  .screen {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column;
+    align-items: center; justify-content: center;
+    opacity: 0;
+    transition: opacity 0.8s ease;
+    pointer-events: none;
+    padding: 40px;
+  }
+  .screen.active { opacity: 1; pointer-events: auto; }
+
+  /* âââ BACKGROUND âââ */
+  body::before {
+    content: '';
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(43,165,222,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 70% 80%, rgba(255,226,118,0.04) 0%, transparent 50%),
+      linear-gradient(180deg, #0a0e14 0%, #0d1219 100%);
+    z-index: -1;
+  }
+
+  /* âââ ATTRACT SCREEN âââ */
+  .attract-logo {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 500;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    margin-bottom: 40px;
+  }
+
+  .attract-headline {
+    font-family: var(--serif);
+    font-size: clamp(60px, 8vw, 120px);
+    font-weight: 600;
+    line-height: 1.05;
+    text-align: center;
+    margin-bottom: 30px;
+  }
+  .attract-headline em {
+    font-style: italic;
+    color: var(--blue);
+  }
+
+  .attract-sub {
+    font-size: clamp(18px, 2.5vw, 28px);
+    font-weight: 300;
+    color: var(--text-muted);
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 60px;
+  }
+
+  .attract-pulse {
+    width: 140px; height: 140px;
+    border-radius: 50%;
+    border: 2px solid var(--blue);
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+    animation: breathe 3s ease-in-out infinite;
+  }
+  .attract-pulse::before,
+  .attract-pulse::after {
+    content: '';
+    position: absolute; inset: -20px;
+    border-radius: 50%;
+    border: 1px solid var(--blue);
+    opacity: 0;
+    animation: ripple 3s ease-out infinite;
+  }
+  .attract-pulse::after { animation-delay: 1.5s; }
+
+  .attract-pulse svg {
+    width: 48px; height: 48px;
+    fill: var(--blue);
+  }
+
+  @keyframes breathe {
+    0%, 100% { transform: scale(1); box-shadow: 0 0 30px var(--blue-glow); }
+    50% { transform: scale(1.05); box-shadow: 0 0 60px var(--blue-glow); }
+  }
+  @keyframes ripple {
+    0% { transform: scale(0.8); opacity: 0.6; }
+    100% { transform: scale(1.6); opacity: 0; }
+  }
+
+  .attract-footer {
+    position: absolute;
+    bottom: 40px;
+    font-size: 14px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--text-muted);
+    opacity: 0.5;
+  }
+
+  /* âââ ENGAGE SCREEN âââ */
+  .engage-text {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .engage-sub {
+    font-size: 22px;
+    color: var(--text-muted);
+    margin-bottom: 50px;
+  }
+
+  .camera-frame {
+    width: min(500px, 70vw);
+    aspect-ratio: 3/4;
+    border-radius: 20px;
+    overflow: hidden;
+    position: relative;
+    border: 2px solid rgba(43,165,222,0.3);
+    box-shadow: 0 0 40px var(--blue-glow);
+  }
+  .camera-frame video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+  }
+
+  .camera-overlay {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    pointer-events: none;
+  }
+  .face-oval {
+    width: 55%; aspect-ratio: 3/4;
+    border: 2px dashed rgba(255,255,255,0.4);
+    border-radius: 50%;
+  }
+
+  /* âââ COUNTDOWN SCREEN âââ */
+  .countdown-number {
+    font-family: var(--serif);
+    font-size: clamp(120px, 20vw, 240px);
+    font-weight: 700;
+    color: var(--blue);
+    animation: countPop 0.6s ease-out;
+    text-shadow: 0 0 80px var(--blue-glow);
+  }
+  @keyframes countPop {
+    0% { transform: scale(2); opacity: 0; }
+    60% { transform: scale(0.95); }
+    100% { transform: scale(1); opacity: 1; }
+  }
+
+  .countdown-camera {
+    position: absolute;
+    bottom: 60px;
+    width: 200px; aspect-ratio: 3/4;
+    border-radius: 12px;
+    overflow: hidden;
+    border: 1px solid rgba(43,165,222,0.3);
+    opacity: 0.7;
+  }
+  .countdown-camera video {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    transform: scaleX(-1);
+  }
+
+  /* âââ FLASH âââ */
+  .flash {
+    position: fixed; inset: 0;
+    background: white;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+  }
+  .flash.fire {
+    animation: flashBang 0.4s ease-out;
+  }
+  @keyframes flashBang {
+    0% { opacity: 0.9; }
+    100% { opacity: 0; }
+  }
+
+  /* âââ ANALYZE SCREEN âââ */
+  .analyze-text {
+    font-family: var(--serif);
+    font-size: clamp(32px, 4vw, 56px);
+    font-weight: 500;
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  .analyze-spinner {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    border: 3px solid rgba(43,165,222,0.15);
+    border-top-color: var(--blue);
+    animation: spin 1s linear infinite;
+  }
+  @keyframes spin { to { transform: rotate(360deg); } }
+
+  .analyze-steps {
+    margin-top: 40px;
+    display: flex; flex-direction: column;
+    gap: 12px;
+    font-size: 16px;
+    color: var(--text-muted);
+  }
+  .analyze-steps .done { color: var(--blue); }
+  .analyze-steps .active { color: var(--text); }
+
+  /* âââ RESULTS SCREEN âââ */
+  #screen-results {
+    padding: 30px 50px;
+    justify-content: flex-start;
+    overflow-y: auto;
+  }
+
+  .results-header {
+    text-align: center;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+  .results-header h1 {
+    font-family: var(--serif);
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .results-header p {
+    font-size: 18px;
+    color: var(--text-muted);
+  }
+
+  .results-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    width: 100%;
+    max-width: 1200px;
+  }
+
+  .result-card {
+    background: var(--dark-card);
+    border-radius: 16px;
+    padding: 28px;
+    border: 1px solid rgba(255,255,255,0.06);
+  }
+  .result-card.featured {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 30px;
+    border-color: var(--blue);
+    box-shadow: 0 0 30px var(--blue-glow);
+  }
+
+  .card-label {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 12px;
+  }
+  .card-title {
+    font-family: var(--serif);
+    font-size: clamp(24px, 3vw, 40px);
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .card-price {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--gold);
+    margin-bottom: 12px;
+  }
+  .card-reason {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--text-muted);
+  }
+  .card-bullets {
+    list-style: none;
+    margin-top: 14px;
+    padding: 0;
+  }
+  .card-bullets li {
+    font-size: 14px;
+    color: var(--text-muted);
+    padding: 4px 0 4px 16px;
+    position: relative;
+  }
+  .card-bullets li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 12px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--blue);
+  }
+
+  .addon-item {
+    padding: 16px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+  }
+  .addon-item:last-child { border-bottom: none; }
+  .addon-name {
+    font-family: var(--serif);
+    font-size: 22px;
+    font-weight: 600;
+  }
+  .addon-price {
+    font-size: 15px;
+    color: var(--gold);
+    margin: 4px 0 6px;
+  }
+  .addon-reason {
+    font-size: 14px;
+    color: var(--text-muted);
+    line-height: 1.5;
+  }
+
+  .qr-section {
+    grid-column: 1 / -1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 40px;
+    background: linear-gradient(135deg, var(--dark-card) 0%, rgba(43,165,222,0.08) 100%);
+    border-color: var(--blue);
+  }
+  .qr-box {
+    background: white;
+    padding: 12px;
+    border-radius: 12px;
+    flex-shrink: 0;
+  }
+  .qr-box img, .qr-box canvas { display: block; }
+  .qr-text h3 {
+    font-family: var(--serif);
+    font-size: 28px;
+    font-weight: 600;
+    margin-bottom: 8px;
+  }
+  .qr-text p {
+    font-size: 16px;
+    color: var(--text-muted);
+    line-height: 1.6;
+  }
+
+  .results-timer {
+    position: fixed;
+    bottom: 0; left: 0;
+    height: 4px;
+    background: var(--blue);
+    transition: width 1s linear;
+    z-index: 50;
+  }
+
+  /* âââ ERROR SCREEN âââ */
+  .error-text {
+    font-family: var(--serif);
+    font-size: 36px;
+    text-align: center;
+    margin-bottom: 20px;
+  }
+  .error-detail {
+    font-size: 16px;
+    color: var(--text-muted);
+    text-align: center;
+    max-width: 500px;
+    margin-bottom: 40px;
+  }
+  .error-btn {
+    padding: 14px 40px;
+    border-radius: 40px;
+    border: 2px solid var(--blue);
+    background: transparent;
+    color: var(--blue);
+    font-size: 16px;
+    font-weight: 600;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.3s;
+  }
+  .error-btn:hover {
+    background: var(--blue);
+    color: var(--dark);
+  }
+
+  /* âââ CONFIG BAR (hidden, press C to toggle) âââ */
+  .config-bar {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.9);
+    padding: 12px 20px;
+    display: none;
+    gap: 16px;
+    align-items: center;
+    z-index: 200;
+    font-size: 13px;
+  }
+  .config-bar.visible { display: flex; }
+  .config-bar label { color: var(--text-muted); }
+  .config-bar input, .config-bar select {
+    background: #1a2030;
+    border: 1px solid #333;
+    color: white;
+    padding: 6px 10px;
+    border-radius: 6px;
+    font-size: 13px;
+  }
+  .config-bar .badge {
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 1px;
+  }
+  .badge.mock { background: var(--gold); color: #000; }
+  .badge.live { background: #22c55e; color: #000; }
+
+  /* âââ SUMMARY BAR âââ */
+  .summary-bar {
+    font-family: var(--serif);
+    font-size: 18px;
+    font-weight: 500;
+    line-height: 1.6;
+    color: var(--text-muted);
+    text-align: center;
+    max-width: 700px;
+  }
+</style>
+</head>
+<body>
+
+<div class="flash" id="flash"></div>
+
+<!-- âââ CONFIG BAR (press C to toggle) âââ -->
+<div class="config-bar" id="configBar">
+  <span class="badge mock" id="modeBadge">MOCK</span>
+  <label>API: <input type="text" id="cfgApiBase" value="https://mirrosa-webapp.vercel.app" size="36"></label>
+  <label>Mode:
+    <select id="cfgMode">
+      <option value="mock" selected>Mock (no API)</option>
+      <option value="live">Live API</option>
+    </select>
+  </label>
+  <label>Idle timeout:
+    <select id="cfgTimeout">
+      <option value="30">30s</option>
+      <option value="60" selected>60s</option>
+      <option value="120">120s</option>
+    </select>
+  </label>
+  <label>State: <span id="cfgState" style="color:var(--blue)">attract</span></label>
+</div>
+
+<!-- âââ ATTRACT âââ -->
+<div class="screen active" id="screen-attract">
+  <div class="attract-logo">Silver Mirror</div>
+  <h1 class="attract-headline">
+    Discover Your<br><em>Perfect Facial</em>
+  </h1>
+  <p class="attract-sub">Free AI skin analysis in 30 seconds</p>
+  <div class="attract-pulse">
+    <svg viewBox="0 0 24 24"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8zm-1-12.5v5l4.28 2.54.72-1.21-3.5-2.08V7.5H11z"/></svg>
+  </div>
+  <div class="attract-footer">Step in front of the screen to begin</div>
+</div>
+
+<!-- âââ ENGAGE âââ -->
+<div class="screen" id="screen-engage">
+  <p class="engage-text">We see you!</p>
+  <p class="engage-sub">Center your face in the oval and hold still</p>
+  <div class="camera-frame">
+    <video id="videoEngage" autoplay playsinline muted></video>
+    <div class="camera-overlay"><div class="face-oval"></div></div>
+  </div>
+</div>
+
+<!-- âââ COUNTDOWN âââ -->
+<div class="screen" id="screen-countdown">
+  <div class="countdown-number" id="countNum">3</div>
+  <div class="countdown-camera">
+    <video id="videoCountdown" autoplay playsinline muted></video>
+  </div>
+</div>
+
+<!-- âââ ANALYZE âââ -->
+<div class="screen" id="screen-analyze">
+  <p class="analyze-text">Analyzing your skin...</p>
+  <div class="analyze-spinner"></div>
+  <div class="analyze-steps" id="analyzeSteps">
+    <div class="active" id="stepUpload">Uploading photo...</div>
+    <div id="stepSurvey">Preparing analysis...</div>
+    <div id="stepAI">Running AI skin assessment...</div>
+    <div id="stepResults">Building your recommendations...</div>
+  </div>
+</div>
+
+<!-- âââ RESULTS âââ -->
+<div class="screen" id="screen-results">
+  <div class="results-header">
+    <h1>Your Skin Results</h1>
+    <p id="resultsSummary"></p>
+  </div>
+  <div class="results-grid" id="resultsGrid">
+    <!-- Populated by JS -->
+  </div>
+  <div class="results-timer" id="resultsTimer"></div>
+</div>
+
+<!-- âââ ERROR âââ -->
+<div class="screen" id="screen-error">
+  <p class="error-text">Something went wrong</p>
+  <p class="error-detail" id="errorDetail">We couldn't complete the analysis. Please try again.</p>
+  <button class="error-btn" onclick="goTo('attract')">Try Again</button>
+</div>
+
+<!-- Hidden canvas for capture -->
+<canvas id="captureCanvas" style="display:none"></canvas>
+
+<script>
+// âââââââââââââââââââââââââââââââââââââââââââââââ
+// SILVER SIDEWALK KIOSK â Phase 6 POC
+// âââââââââââââââââââââââââââââââââââââââââââââââ
+
+const CONFIG = {
+  get apiBase() { return document.getElementById('cfgApiBase').value.replace(/\/+$/, ''); },
+  get mockMode() { return document.getElementById('cfgMode').value === 'mock'; },
+  get idleTimeout() { return parseInt(document.getElementById('cfgTimeout').value) * 1000; },
+  engageDelay: 2000,       // ms after face detected before countdown
+  countdownFrom: 3,
+  faceCheckInterval: 300,  // ms between face detection polls
+  webAppUrl: 'https://mirrosaai.silvermirror.com',
+};
+
+// âââ STATE MACHINE âââ
+let currentState = 'attract';
+let stream = null;
+let faceDetector = null;
+let faceCheckTimer = null;
+let idleTimer = null;
+let engageTimer = null;
+let consecutiveFaces = 0;
+const FACE_STREAK_NEEDED = 4;
+
+function goTo(state) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const el = document.getElementById(`screen-${state}`);
+  if (el) el.classList.add('active');
+  currentState = state;
+  document.getElementById('cfgState').textContent = state;
+
+  clearTimeout(idleTimer);
+  clearTimeout(engageTimer);
+  clearInterval(faceCheckTimer);
+  consecutiveFaces = 0;
+
+  switch (state) {
+    case 'attract':   enterAttract(); break;
+    case 'engage':    enterEngage(); break;
+    case 'countdown': enterCountdown(); break;
+    case 'analyze':   enterAnalyze(); break;
+    case 'results':   break; // populated before transition
+    case 'error':     idleTimer = setTimeout(() => goTo('attract'), 15000); break;
+  }
+}
+
+// âââ CAMERA âââ
+async function startCamera() {
+  if (stream) return stream;
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({
+      video: { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: 'user' },
+      audio: false
+    });
+    document.querySelectorAll('video').forEach(v => { v.srcObject = stream; });
+    return stream;
+  } catch (e) {
+    console.error('Camera error:', e);
+    return null;
+  }
+}
+
+function stopCamera() {
+  if (stream) {
+    stream.getTracks().forEach(t => t.stop());
+    stream = null;
+  }
+}
+
+// âââ FACE DETECTION âââ
+async function initFaceDetector() {
+  if (typeof FaceDetector !== 'undefined') {
+    try {
+      faceDetector = new FaceDetector({ fastMode: true, maxDetectedFaces: 1 });
+      console.log('FaceDetector API available');
+      return true;
+    } catch (e) {
+      console.warn('FaceDetector init failed:', e);
+    }
+  }
+  console.log('FaceDetector API not available â using motion fallback');
+  return false;
+}
+
+async function detectFace(video) {
+  if (!faceDetector || !video || !video.videoWidth) return false;
+  try {
+    const faces = await faceDetector.detect(video);
+    return faces.length > 0;
+  } catch {
+    return false;
+  }
+}
+
+// âââ ATTRACT âââ
+async function enterAttract() {
+  await startCamera();
+  const video = document.getElementById('videoEngage');
+
+  faceCheckTimer = setInterval(async () => {
+    const hasFace = await detectFace(video);
+    if (hasFace) {
+      consecutiveFaces++;
+      if (consecutiveFaces >= FACE_STREAK_NEEDED) {
+        goTo('engage');
+      }
+    } else {
+      consecutiveFaces = 0;
+    }
+  }, CONFIG.faceCheckInterval);
+}
+
+// âââ ENGAGE âââ
+function enterEngage() {
+  consecutiveFaces = 0;
+  const video = document.getElementById('videoEngage');
+
+  let stableCount = 0;
+  const STABLE_NEEDED = 8; // ~2.4 seconds of stable face
+
+  faceCheckTimer = setInterval(async () => {
+    const hasFace = await detectFace(video);
+    if (hasFace) {
+      stableCount++;
+      if (stableCount >= STABLE_NEEDED) {
+        goTo('countdown');
+      }
+    } else {
+      stableCount = Math.max(0, stableCount - 2); // decay
+      // If they walk away completely, go back to attract
+      if (stableCount <= -10) goTo('attract');
+    }
+  }, CONFIG.faceCheckInterval);
+
+  // Timeout â if no stable face in 15s, go back
+  engageTimer = setTimeout(() => goTo('attract'), 15000);
+}
+
+// âââ COUNTDOWN âââ
+function enterCountdown() {
+  const numEl = document.getElementById('countNum');
+  let count = CONFIG.countdownFrom;
+  numEl.textContent = count;
+
+  const tick = setInterval(() => {
+    count--;
+    if (count > 0) {
+      numEl.textContent = count;
+      // Re-trigger animation
+      numEl.style.animation = 'none';
+      numEl.offsetHeight; // reflow
+      numEl.style.animation = 'countPop 0.6s ease-out';
+    } else {
+      clearInterval(tick);
+      captureAndAnalyze();
+    }
+  }, 1000);
+}
+
+// âââ CAPTURE âââ
+function capturePhoto() {
+  const video = document.getElementById('videoEngage');
+  const canvas = document.getElementById('captureCanvas');
+
+  // Capture at video's native resolution
+  canvas.width = video.videoWidth || 1280;
+  canvas.height = video.videoHeight || 720;
+
+  const ctx = canvas.getContext('2d');
+  // Mirror the capture (webcam is mirrored)
+  ctx.translate(canvas.width, 0);
+  ctx.scale(-1, 1);
+  ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+  ctx.setTransform(1, 0, 0, 1, 0, 0);
+
+  // Flash effect
+  const flash = document.getElementById('flash');
+  flash.classList.remove('fire');
+  flash.offsetHeight;
+  flash.classList.add('fire');
+
+  return new Promise(resolve => {
+    canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.90);
+  });
+}
+
+// âââ ANALYZE âââ
+async function captureAndAnalyze() {
+  goTo('analyze');
+
+  try {
+    const photoBlob = await capturePhoto();
+    markStep('stepUpload', 'done');
+    markStep('stepSurvey', 'active');
+
+    let result;
+
+    if (CONFIG.mockMode) {
+      result = await mockAnalysis();
+    } else {
+      result = await liveAnalysis(photoBlob);
+    }
+
+    showResults(result);
+    goTo('results');
+    startIdleTimer();
+
+  } catch (e) {
+    console.error('Analysis failed:', e);
+    document.getElementById('errorDetail').textContent = e.message || 'Analysis failed. Please try again.';
+    goTo('error');
+  }
+}
+
+function markStep(id, cls) {
+  const el = document.getElementById(id);
+  el.className = cls;
+}
+
+// âââ LIVE API âââ
+async function liveAnalysis(photoBlob) {
+  // Step 1: Upload photo (send front photo for all 3 slots)
+  const form = new FormData();
+  form.append('front', photoBlob, 'front.jpg');
+  form.append('left', photoBlob, 'left.jpg');
+  form.append('right', photoBlob, 'right.jpg');
+
+  const uploadRes = await fetch(`${CONFIG.apiBase}/api/analysis-jobs`, {
+    method: 'POST',
+    body: form
+  });
+  if (!uploadRes.ok) throw new Error('Photo upload failed');
+  const uploadData = await uploadRes.json();
+  const jobId = uploadData.jobId;
+
+  markStep('stepSurvey', 'done');
+  markStep('stepAI', 'active');
+
+  // Step 2: Submit survey with safe kiosk defaults
+  const surveyRes = await fetch(`${CONFIG.apiBase}/api/analysis-jobs/${jobId}/survey`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      concerns: JSON.stringify(['Rough and Bumpy Texture', 'Dehydration']),
+      pregnantOrBreastfeeding: 'no',
+      ageRange: '',
+      fitzpatrick: '',
+      gender: '',
+      zoneFeel: { tZone: '', cheeks: '', chin: '' },
+      ingredientSensitivities: JSON.stringify([]),
+      breakoutFrequency: '',
+      currentPrescriptions: JSON.stringify([]),
+      currentRoutineProducts: JSON.stringify([]),
+      routinePreference: ''
+    })
+  });
+  if (!surveyRes.ok) throw new Error('Survey submission failed');
+
+  // Step 3: Run analysis
+  const runRes = await fetch(`${CONFIG.apiBase}/api/analysis-jobs/${jobId}/run-analysis`, {
+    method: 'POST'
+  });
+  if (!runRes.ok) throw new Error('Analysis failed');
+  const runData = await runRes.json();
+
+  markStep('stepAI', 'done');
+  markStep('stepResults', 'active');
+
+  return runData.result || runData;
+}
+
+// âââ MOCK ANALYSIS âââ
+function mockAnalysis() {
+  return new Promise(resolve => {
+    setTimeout(() => { markStep('stepSurvey', 'done'); markStep('stepAI', 'active'); }, 800);
+    setTimeout(() => { markStep('stepAI', 'done'); markStep('stepResults', 'active'); }, 2200);
+    setTimeout(() => {
+      resolve({
+        skin_type_title: 'Combination with Visible Dryness',
+        baumann_type: 'DSPW',
+        high_level_summary: 'You have Combination skin with areas of dehydration and early signs of fine lines.',
+        summary: 'Your skin shows a mix of oiliness in the T-zone and dryness on the cheeks. We noticed some fine lines around the eyes and visible pores across the nose.',
+        recommended_facial: {
+          name: 'Seasonal Hydrating Facial',
+          service_id: 'SRV_SEASONAL_HYDRATING_FACIAL',
+          price: 169,
+          reason: 'Your skin shows dehydration as the primary concern, particularly visible on the cheeks and around the jawline.',
+          why_recommend_summary: 'This treatment focuses on barrier repair and deep hydration, which directly addresses the dehydration visible in your scan.',
+          why_recommend_bullets: [
+            'Restores moisture barrier with antioxidant exfoliation',
+            'Delivers deep hydration via ultrasound therapy',
+            'Adapts seasonally to protect against climate damage'
+          ]
+        },
+        recommended_add_ons: [
+          {
+            name: 'Hydradermabrasion',
+            service_id: 'ADD_HYDRADERMABRASION',
+            price: 95,
+            reason: 'Diamond-tip exfoliation clears dry patches while infusing hydrating serums deep into your skin.',
+            why_recommend_bullets: ['Removes dry, flaky surface cells', 'Infuses hyaluronic serums under pressure', 'Reveals smoother texture immediately']
+          },
+          {
+            name: 'Custom Jelly Mask',
+            service_id: 'ADD_JELLY_MASK',
+            price: 50,
+            reason: 'A deeply nourishing mask tailored with hyaluronic acid to lock in the hydration from your facial.',
+            why_recommend_bullets: ['Seals in moisture post-treatment', 'Plumps dehydrated areas visibly', 'Leaves skin silky and refreshed']
+          }
+        ],
+        recommended_products: [
+          {
+            name: 'iS Clinical Sheald Recovery Balm',
+            price: 83,
+            category: 'Moisturizer',
+            shopify_handle: 'is-clinical-sheald-recovery-balm',
+            reason: 'A rich barrier-repair balm for your dry, sensitive areas.'
+          }
+        ]
+      });
+    }, 3500);
+  });
+}
+
+// âââ RESULTS RENDERER âââ
+function showResults(data) {
+  const grid = document.getElementById('resultsGrid');
+  const summary = document.getElementById('resultsSummary');
+
+  summary.textContent = data.high_level_summary || data.summary || '';
+
+  const facial = data.recommended_facial || {};
+  const addons = data.recommended_add_ons || [];
+  const products = data.recommended_products || [];
+
+  // Build QR code
+  const qrUrl = `${CONFIG.webAppUrl}?mirrosa_source=kiosk`;
+  const qr = qrcode(0, 'M');
+  qr.addData(qrUrl);
+  qr.make();
+  const qrImg = qr.createDataURL(6, 0);
+
+  grid.innerHTML = `
+    <!-- Featured Facial -->
+    <div class="result-card featured">
+      <div>
+        <div class="card-label">Recommended Facial</div>
+        <div class="card-title">${facial.name || 'Signature Facial'}</div>
+        <div class="card-price">$${facial.price || 119}</div>
+        <div class="card-reason">${facial.reason || ''}</div>
+      </div>
+      <div>
+        <div class="card-label">Why We Recommend</div>
+        <p class="card-reason">${facial.why_recommend_summary || ''}</p>
+        ${facial.why_recommend_bullets ? `
+        <ul class="card-bullets">
+          ${facial.why_recommend_bullets.map(b => `<li>${b}</li>`).join('')}
+        </ul>` : ''}
+      </div>
+    </div>
+
+    <!-- Add-Ons -->
+    <div class="result-card">
+      <div class="card-label">Recommended Add-Ons</div>
+      ${addons.map(a => `
+        <div class="addon-item">
+          <div class="addon-name">${a.name}</div>
+          <div class="addon-price">+$${a.price}</div>
+          <div class="addon-reason">${a.reason || ''}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- Products -->
+    <div class="result-card">
+      <div class="card-label">Recommended Products</div>
+      ${products.map(p => `
+        <div class="addon-item">
+          <div class="addon-name">${p.name}</div>
+          <div class="addon-price">$${p.price}</div>
+          <div class="addon-reason">${p.reason || ''}</div>
+        </div>
+      `).join('')}
+    </div>
+
+    <!-- QR Code -->
+    <div class="result-card qr-section">
+      <div class="qr-box">
+        <img src="${qrImg}" width="140" height="140" alt="QR Code">
+      </div>
+      <div class="qr-text">
+        <h3>Take Your Results With You</h3>
+        <p>Scan this code to view your full analysis on your phone, save your results, and book your perfect facial.</p>
+      </div>
+    </div>
+  `;
+}
+
+// âââ IDLE TIMER (results screen) âââ
+function startIdleTimer() {
+  const timerEl = document.getElementById('resultsTimer');
+  const total = CONFIG.idleTimeout;
+  let elapsed = 0;
+
+  timerEl.style.width = '100%';
+
+  clearInterval(idleTimer);
+  idleTimer = setInterval(() => {
+    elapsed += 1000;
+    const pct = Math.max(0, 100 - (elapsed / total * 100));
+    timerEl.style.width = `${pct}%`;
+
+    if (elapsed >= total) {
+      clearInterval(idleTimer);
+      goTo('attract');
+    }
+  }, 1000);
+}
+
+// âââ CONFIG BAR âââ
+document.addEventListener('keydown', e => {
+  // Press C to toggle config
+  if (e.key === 'c' || e.key === 'C') {
+    const bar = document.getElementById('configBar');
+    bar.classList.toggle('visible');
+  }
+  // Press Escape to go back to attract
+  if (e.key === 'Escape') {
+    goTo('attract');
+  }
+  // Press Space to simulate face detection (for testing without FaceDetector API)
+  if (e.key === ' ' && currentState === 'attract') {
+    e.preventDefault();
+    goTo('engage');
+  }
+  if (e.key === ' ' && currentState === 'engage') {
+    e.preventDefault();
+    goTo('countdown');
+  }
+});
+
+document.getElementById('cfgMode').addEventListener('change', function() {
+  const badge = document.getElementById('modeBadge');
+  if (this.value === 'mock') {
+    badge.textContent = 'MOCK';
+    badge.className = 'badge mock';
+  } else {
+    badge.textContent = 'LIVE';
+    badge.className = 'badge live';
+  }
+});
+
+// âââ BOOT âââ
+async function boot() {
+  await initFaceDetector();
+  await startCamera();
+  goTo('attract');
+  console.log(`
+  âââââââââââââââââââââââââââââââââââââââ
+  â  SILVER SIDEWALK KIOSK â POC v0.1   â
+  â                                     â
+  â  Press C     â config panel         â
+  â  Press SPACE â advance state        â
+  â  Press ESC   â reset to attract     â
+  â                                     â
+  â  Mock mode: ON (no API calls)       â
+  â  FaceDetector: ${faceDetector ? 'YES' : 'NO (use SPACE)'}            â
+  âââââââââââââââââââââââââââââââââââââââ
+  `);
+}
+
+boot();
+</script>
+</body>
+</html>
