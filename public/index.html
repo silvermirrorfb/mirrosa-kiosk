@@ -473,14 +473,30 @@ async function initMediaPipe(onProgress) {
   return true;
 }
 
+let lastFrameData = null;
 function detectFace(video) {
-  if (!landmarker || !video || !video.videoWidth || video.readyState < 2) return false;
-  try {
-    const result = landmarker.detectForVideo(video, performance.now());
-    return result.faceLandmarks && result.faceLandmarks.length > 0;
-  } catch (e) {
-    return false;
+  if (!video || !video.videoWidth || video.readyState < 2) return false;
+  if (landmarker) {
+    try {
+      const result = landmarker.detectForVideo(video, performance.now());
+      return result.faceLandmarks && result.faceLandmarks.length > 0;
+    } catch (e) { return false; }
   }
+  try {
+    const c = document.createElement('canvas');
+    c.width = 64; c.height = 48;
+    const ctx = c.getContext('2d', {willReadFrequently: true});
+    ctx.drawImage(video, 0, 0, 64, 48);
+    const frame = ctx.getImageData(0, 0, 64, 48).data;
+    if (!lastFrameData) { lastFrameData = frame; return false; }
+    let diff = 0;
+    for (let i = 0; i < frame.length; i += 16) {
+      diff += Math.abs(frame[i] - lastFrameData[i]);
+    }
+    lastFrameData = frame;
+    const avgDiff = diff / (frame.length / 16);
+    return avgDiff > 8;
+  } catch(e) { return false; }
 }
 
 // âââ ATTRACT âââ
@@ -778,13 +794,24 @@ async function boot() {
 
   try {
     // Load MediaPipe face detection
-    await initMediaPipe((msg, pct) => {
-      status.textContent = msg;
-      bar.style.width = pct + '%';
-    });
+   try {
+      await Promise.race([
+        initMediaPipe((msg, pct) => {
+          status.textContent = msg;
+          bar.style.width = pct + '%';
+        }),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000))
+      ]);
+      function detectFace(video) { = 'FACE: MediaPipe';
+      faceBadge.style.background = '#22c55e';
+    } catch(e) {
+      console.warn('MediaPipe failed, using motion detection fallback:', e.message);
+      landmarker = null;
+      function detectFace(video) { = 'FACE: motion';
+      faceBadge.style.background = '#f59e0b';
+    }
 
-    faceBadge.textContent = 'FACE: MediaPipe';
-    faceBadge.style.background = '#22c55e';
+  
 
     // Start camera
     status.textContent = 'Starting camera...';
@@ -819,7 +846,7 @@ async function boot() {
     status.textContent = 'Failed to load: ' + e.message;
     bar.style.width = '100%';
     bar.style.background = '#ef4444';
-    faceBadge.textContent = 'FACE: FAILED';
+    function detectFace(video) { = 'FACE: FAILED';
     faceBadge.style.background = '#ef4444';
 
     // Still allow manual operation via Space key
