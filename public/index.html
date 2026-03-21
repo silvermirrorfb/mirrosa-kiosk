@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Silver Mirror â Skin Analysis</title>
+<title>Silver Mirror — Skin Analysis</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;700&family=Cormorant+Garamond:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
@@ -54,7 +54,7 @@
     z-index: -1;
   }
 
-  /* âââ LOADING SCREEN âââ */
+  /* ═══ LOADING SCREEN ═══ */
   .loading-text {
     font-family: var(--serif);
     font-size: 32px;
@@ -82,7 +82,7 @@
     color: var(--text-muted);
   }
 
-  /* âââ ATTRACT SCREEN âââ */
+  /* ═══ ATTRACT SCREEN ═══ */
   .attract-logo {
     font-family: var(--serif);
     font-size: 28px;
@@ -150,7 +150,7 @@
     opacity: 0.5;
   }
 
-  /* âââ ENGAGE SCREEN âââ */
+  /* ═══ ENGAGE SCREEN ═══ */
   .engage-text {
     font-family: var(--serif);
     font-size: clamp(36px, 5vw, 64px);
@@ -182,7 +182,7 @@
   }
   .face-oval.detected { border-color: var(--blue); border-style: solid; box-shadow: 0 0 20px var(--blue-glow); }
 
-  /* âââ COUNTDOWN SCREEN âââ */
+  /* ═══ COUNTDOWN SCREEN ═══ */
   .countdown-number {
     font-family: var(--serif);
     font-size: clamp(120px, 20vw, 240px);
@@ -207,12 +207,12 @@
   }
   .countdown-camera video { width: 100%; height: 100%; object-fit: cover; transform: scaleX(-1); }
 
-  /* âââ FLASH âââ */
+  /* ═══ FLASH ═══ */
   .flash { position: fixed; inset: 0; background: white; opacity: 0; pointer-events: none; z-index: 100; }
   .flash.fire { animation: flashBang 0.4s ease-out; }
   @keyframes flashBang { 0% { opacity: 0.9; } 100% { opacity: 0; } }
 
-  /* âââ ANALYZE SCREEN âââ */
+  /* ═══ ANALYZE SCREEN ═══ */
   .analyze-text {
     font-family: var(--serif);
     font-size: clamp(32px, 4vw, 56px);
@@ -232,7 +232,7 @@
   .analyze-steps .done { color: var(--blue); }
   .analyze-steps .active { color: var(--text); }
 
-  /* âââ RESULTS SCREEN âââ */
+  /* ═══ RESULTS SCREEN ═══ */
   #screen-results { padding: 30px 50px; justify-content: flex-start; overflow-y: auto; }
   .results-header { text-align: center; margin-bottom: 30px; width: 100%; }
   .results-header h1 { font-family: var(--serif); font-size: clamp(36px, 5vw, 64px); font-weight: 600; margin-bottom: 8px; }
@@ -259,13 +259,13 @@
   .qr-text p { font-size: 16px; color: var(--text-muted); line-height: 1.6; }
   .results-timer { position: fixed; bottom: 0; left: 0; height: 4px; background: var(--blue); transition: width 1s linear; z-index: 50; }
 
-  /* âââ ERROR SCREEN âââ */
+  /* ═══ ERROR SCREEN ═══ */
   .error-text { font-family: var(--serif); font-size: 36px; text-align: center; margin-bottom: 20px; }
   .error-detail { font-size: 16px; color: var(--text-muted); text-align: center; max-width: 500px; margin-bottom: 40px; }
   .error-btn { padding: 14px 40px; border-radius: 40px; border: 2px solid var(--blue); background: transparent; color: var(--blue); font-size: 16px; font-weight: 600; letter-spacing: 2px; text-transform: uppercase; cursor: pointer; transition: all 0.3s; }
   .error-btn:hover { background: var(--blue); color: var(--dark); }
 
-  /* âââ CONFIG BAR âââ */
+  /* ═══ CONFIG BAR ═══ */
   .config-bar { position: fixed; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.9); padding: 12px 20px; display: none; gap: 16px; align-items: center; z-index: 200; font-size: 13px; flex-wrap: wrap; }
   .config-bar.visible { display: flex; }
   .config-bar label { color: var(--text-muted); }
@@ -280,11 +280,11 @@
 
 <div class="flash" id="flash"></div>
 
-<!-- âââ CONFIG BAR âââ -->
+<!-- ═══ CONFIG BAR ═══ -->
 <div class="config-bar" id="configBar">
   <span class="badge mock" id="modeBadge">MOCK</span>
   <span class="badge info" id="faceBadge">FACE: loading</span>
-  <label>API: <input type="text" id="cfgApiBase" value="" size="28" placeholder="(relative â Vercel proxy)"></label>
+  <label>API: <input type="text" id="cfgApiBase" value="" size="28" placeholder="(relative — Vercel proxy)"></label>
   <label>Mode:
     <select id="cfgMode">
       <option value="mock" selected>Mock (no API)</option>
@@ -301,14 +301,14 @@
   <label>State: <span id="cfgState" style="color:var(--blue)">loading</span></label>
 </div>
 
-<!-- âââ LOADING âââ -->
+<!-- ═══ LOADING ═══ -->
 <div class="screen active" id="screen-loading">
   <div class="loading-text">Preparing skin analysis...</div>
   <div class="loading-bar-track"><div class="loading-bar-fill" id="loadingBar"></div></div>
-  <div class="loading-status" id="loadingStatus">Loading face detection model...</div>
+  <div class="loading-status" id="loadingStatus">Starting camera...</div>
 </div>
 
-<!-- âââ ATTRACT âââ -->
+<!-- ═══ ATTRACT ═══ -->
 <div class="screen" id="screen-attract">
   <div class="attract-logo">Silver Mirror</div>
   <h1 class="attract-headline">Discover Your<br><em>Perfect Facial</em></h1>
@@ -319,7 +319,7 @@
   <div class="attract-footer">Step in front of the screen to begin</div>
 </div>
 
-<!-- âââ ENGAGE âââ -->
+<!-- ═══ ENGAGE ═══ -->
 <div class="screen" id="screen-engage">
   <p class="engage-text">We see you!</p>
   <p class="engage-sub">Center your face in the oval and hold still</p>
@@ -329,7 +329,7 @@
   </div>
 </div>
 
-<!-- âââ COUNTDOWN âââ -->
+<!-- ═══ COUNTDOWN ═══ -->
 <div class="screen" id="screen-countdown">
   <div class="countdown-number" id="countNum">3</div>
   <div class="countdown-camera">
@@ -337,7 +337,7 @@
   </div>
 </div>
 
-<!-- âââ ANALYZE âââ -->
+<!-- ═══ ANALYZE ═══ -->
 <div class="screen" id="screen-analyze">
   <p class="analyze-text">Analyzing your skin...</p>
   <div class="analyze-spinner"></div>
@@ -349,7 +349,7 @@
   </div>
 </div>
 
-<!-- âââ RESULTS âââ -->
+<!-- ═══ RESULTS ═══ -->
 <div class="screen" id="screen-results">
   <div class="results-header">
     <h1>Your Skin Results</h1>
@@ -359,7 +359,7 @@
   <div class="results-timer" id="resultsTimer"></div>
 </div>
 
-<!-- âââ ERROR âââ -->
+<!-- ═══ ERROR ═══ -->
 <div class="screen" id="screen-error">
   <p class="error-text">Something went wrong</p>
   <p class="error-detail" id="errorDetail">We couldn't complete the analysis. Please try again.</p>
@@ -368,38 +368,42 @@
 
 <canvas id="captureCanvas" style="display:none"></canvas>
 
-<!-- âââ MEDIAPIPE âââ -->
-<script type="module">
-import { FaceLandmarker, FilesetResolver } from 'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs';
+<!-- ═══ NO MEDIAPIPE — PURE MOTION DETECTION ═══ -->
+<script>
+// ═══════════════════════════════════════════════
+// SILVER SIDEWALK KIOSK v1.1 — Pi Compatible
+// Motion detection (no MediaPipe / no WASM)
+// ═══════════════════════════════════════════════
 
-// âââââââââââââââââââââââââââââââââââââââââââââââ
-// SILVER SIDEWALK KIOSK â v1.0 PRODUCTION
-// âââââââââââââââââââââââââââââââââââââââââââââââ
-
-const CONFIG = {
+var CONFIG = {
   get apiBase() { return document.getElementById('cfgApiBase').value.replace(/\/+$/, ''); },
   get mockMode() { return document.getElementById('cfgMode').value === 'mock'; },
   get idleTimeout() { return parseInt(document.getElementById('cfgTimeout').value) * 1000; },
   countdownFrom: 3,
   faceCheckInterval: 300,
-  faceStreakNeeded: 10,     // 10 Ã 300ms = 3 seconds to trigger
-  engageStableNeeded: 8,    // 8 Ã 300ms = ~2.4 seconds to confirm
+  faceStreakNeeded: 10,
+  engageStableNeeded: 8,
+  motionThreshold: 8,
   webAppUrl: 'https://mirrosaai.silvermirror.com',
 };
 
-let currentState = 'loading';
-let stream = null;
-let landmarker = null;
-let faceCheckTimer = null;
-let idleTimer = null;
-let engageTimer = null;
-let countdownTimer = null;
-let consecutiveFaces = 0;
+var currentState = 'loading';
+var stream = null;
+var faceCheckTimer = null;
+var idleTimer = null;
+var engageTimer = null;
+var countdownTimer = null;
+var consecutiveFaces = 0;
+var lastFrameData = null;
+var motionCanvas = document.createElement('canvas');
+motionCanvas.width = 64;
+motionCanvas.height = 48;
+var motionCtx = motionCanvas.getContext('2d', { willReadFrequently: true });
 
-// âââ STATE MACHINE âââ
+// ═══ STATE MACHINE ═══
 function goTo(state) {
-  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
-  const el = document.getElementById(`screen-${state}`);
+  document.querySelectorAll('.screen').forEach(function(s) { s.classList.remove('active'); });
+  var el = document.getElementById('screen-' + state);
   if (el) el.classList.add('active');
   currentState = state;
   document.getElementById('cfgState').textContent = state;
@@ -410,17 +414,15 @@ function goTo(state) {
   clearInterval(countdownTimer);
   consecutiveFaces = 0;
 
-  // Reset face oval
-  const oval = document.getElementById('faceOval');
+  var oval = document.getElementById('faceOval');
   if (oval) oval.classList.remove('detected');
 
-  // Reset analyze steps
   if (state !== 'analyze') {
-    ['stepUpload','stepSurvey','stepAI','stepResults'].forEach(id => {
-      const el = document.getElementById(id);
+    ['stepUpload','stepSurvey','stepAI','stepResults'].forEach(function(id) {
+      var el = document.getElementById(id);
       if (el) el.className = '';
     });
-    const first = document.getElementById('stepUpload');
+    var first = document.getElementById('stepUpload');
     if (first) first.className = 'active';
   }
 
@@ -430,116 +432,87 @@ function goTo(state) {
     case 'countdown': enterCountdown(); break;
     case 'analyze':   break;
     case 'results':   break;
-    case 'error':     idleTimer = setTimeout(() => goTo('attract'), 15000); break;
+    case 'error':     idleTimer = setTimeout(function() { goTo('attract'); }, 15000); break;
   }
 }
 
-// âââ CAMERA âââ
-async function startCamera() {
-  if (stream) return stream;
-  try {
-    stream = await navigator.mediaDevices.getUserMedia({
-      video: { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: 'user' },
-      audio: false
-    });
-    document.querySelectorAll('video').forEach(v => { v.srcObject = stream; });
-    return stream;
-  } catch (e) {
+// ═══ CAMERA ═══
+function startCamera() {
+  if (stream) return Promise.resolve(stream);
+  return navigator.mediaDevices.getUserMedia({
+    video: { width: { ideal: 1920 }, height: { ideal: 1080 }, facingMode: 'user' },
+    audio: false
+  }).then(function(s) {
+    stream = s;
+    document.querySelectorAll('video').forEach(function(v) { v.srcObject = s; });
+    return s;
+  }).catch(function(e) {
     console.error('Camera error:', e);
-    return null;
-  }
-}
-
-// âââ MEDIAPIPE FACE DETECTION âââ
-async function initMediaPipe(onProgress) {
-  onProgress('Loading vision runtime...', 20);
-
-  const vision = await FilesetResolver.forVisionTasks(
-    'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-  );
-
-  onProgress('Downloading face detection model...', 50);
-
-  landmarker = await FaceLandmarker.createFromOptions(vision, {
-    baseOptions: {
-      modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task',
-      delegate: 'CPU',
-    },
-    runningMode: 'VIDEO',
-    numFaces: 1,
+    throw e;
   });
-
-  onProgress('Face detection ready', 100);
-  return true;
 }
 
-let lastFrameData = null;
-function detectFace(video) {
+// ═══ MOTION DETECTION ═══
+function detectMotion(video) {
   if (!video || !video.videoWidth || video.readyState < 2) return false;
-  if (landmarker) {
-    try {
-      const result = landmarker.detectForVideo(video, performance.now());
-      return result.faceLandmarks && result.faceLandmarks.length > 0;
-    } catch (e) { return false; }
-  }
   try {
-    const c = document.createElement('canvas');
-    c.width = 64; c.height = 48;
-    const ctx = c.getContext('2d', {willReadFrequently: true});
-    ctx.drawImage(video, 0, 0, 64, 48);
-    const frame = ctx.getImageData(0, 0, 64, 48).data;
-    if (!lastFrameData) { lastFrameData = frame; return false; }
-    let diff = 0;
-    for (let i = 0; i < frame.length; i += 16) {
+    motionCtx.drawImage(video, 0, 0, 64, 48);
+    var frame = motionCtx.getImageData(0, 0, 64, 48).data;
+    if (!lastFrameData) {
+      lastFrameData = new Uint8Array(frame);
+      return false;
+    }
+    var diff = 0;
+    var samples = 0;
+    for (var i = 0; i < frame.length; i += 16) {
       diff += Math.abs(frame[i] - lastFrameData[i]);
+      samples++;
     }
-    lastFrameData = frame;
-    const avgDiff = diff / (frame.length / 16);
-    return avgDiff > 8;
-  } catch(e) { return false; }
-}
-
-// âââ ATTRACT âââ
-async function enterAttract() {
-  await startCamera();
-  const video = document.getElementById('videoEngage');
-
-  // Wait for video to be ready
-  if (!video.videoWidth) {
-    await new Promise(resolve => {
-      const check = setInterval(() => {
-        if (video.videoWidth && video.readyState >= 2) {
-          clearInterval(check);
-          resolve();
-        }
-      }, 100);
-    });
+    lastFrameData = new Uint8Array(frame);
+    var avgDiff = diff / samples;
+    return avgDiff > CONFIG.motionThreshold;
+  } catch (e) {
+    return false;
   }
-
-  faceCheckTimer = setInterval(() => {
-    const hasFace = detectFace(video);
-    if (hasFace) {
-      consecutiveFaces++;
-      if (consecutiveFaces >= CONFIG.faceStreakNeeded) {
-        goTo('engage');
-      }
-    } else {
-      consecutiveFaces = Math.max(0, consecutiveFaces - 1); // slow decay instead of hard reset
-    }
-  }, CONFIG.faceCheckInterval);
 }
 
-// âââ ENGAGE âââ
+// ═══ ATTRACT ═══
+function enterAttract() {
+  lastFrameData = null;
+  startCamera().then(function() {
+    var video = document.getElementById('videoEngage');
+    function waitReady() {
+      if (video.videoWidth && video.readyState >= 2) {
+        faceCheckTimer = setInterval(function() {
+          var hasMotion = detectMotion(video);
+          if (hasMotion) {
+            consecutiveFaces++;
+            if (consecutiveFaces >= CONFIG.faceStreakNeeded) {
+              goTo('engage');
+            }
+          } else {
+            consecutiveFaces = Math.max(0, consecutiveFaces - 1);
+          }
+        }, CONFIG.faceCheckInterval);
+      } else {
+        setTimeout(waitReady, 200);
+      }
+    }
+    waitReady();
+  });
+}
+
+// ═══ ENGAGE ═══
 function enterEngage() {
   consecutiveFaces = 0;
-  const video = document.getElementById('videoEngage');
-  const oval = document.getElementById('faceOval');
+  lastFrameData = null;
+  var video = document.getElementById('videoEngage');
+  var oval = document.getElementById('faceOval');
+  var stableCount = 0;
 
-  let stableCount = 0;
-
-  faceCheckTimer = setInterval(() => {
-    const hasFace = detectFace(video);
-    if (hasFace) {
+  faceCheckTimer = setInterval(function() {
+    var hasMotion = detectMotion(video);
+    if (hasMotion) {
       stableCount++;
       if (oval) oval.classList.add('detected');
       if (stableCount >= CONFIG.engageStableNeeded) {
@@ -548,25 +521,22 @@ function enterEngage() {
     } else {
       stableCount = Math.max(0, stableCount - 2);
       if (oval) oval.classList.remove('detected');
-      if (stableCount <= 0) {
-        // Track how long they've been gone
-        consecutiveFaces++;
-        if (consecutiveFaces > 20) goTo('attract'); // ~6 seconds of no face
-      }
+      consecutiveFaces++;
+      if (consecutiveFaces > 20) goTo('attract');
     }
   }, CONFIG.faceCheckInterval);
 
-  engageTimer = setTimeout(() => goTo('attract'), 20000);
+  engageTimer = setTimeout(function() { goTo('attract'); }, 20000);
 }
 
-// âââ COUNTDOWN âââ
+// ═══ COUNTDOWN ═══
 function enterCountdown() {
-  const numEl = document.getElementById('countNum');
-  let count = CONFIG.countdownFrom;
+  var numEl = document.getElementById('countNum');
+  var count = CONFIG.countdownFrom;
   numEl.textContent = count;
   numEl.style.animation = 'countPop 0.6s ease-out';
 
-  countdownTimer = setInterval(() => {
+  countdownTimer = setInterval(function() {
     count--;
     if (count > 0) {
       numEl.textContent = count;
@@ -580,110 +550,104 @@ function enterCountdown() {
   }, 1000);
 }
 
-// âââ CAPTURE âââ
+// ═══ CAPTURE ═══
 function capturePhoto() {
-  const video = document.getElementById('videoEngage');
-  const canvas = document.getElementById('captureCanvas');
-
+  var video = document.getElementById('videoEngage');
+  var canvas = document.getElementById('captureCanvas');
   canvas.width = video.videoWidth || 1280;
   canvas.height = video.videoHeight || 720;
-
-  const ctx = canvas.getContext('2d');
+  var ctx = canvas.getContext('2d');
   ctx.translate(canvas.width, 0);
   ctx.scale(-1, 1);
   ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
   ctx.setTransform(1, 0, 0, 1, 0, 0);
 
-  const flash = document.getElementById('flash');
+  var flash = document.getElementById('flash');
   flash.classList.remove('fire');
   flash.offsetHeight;
   flash.classList.add('fire');
 
-  return new Promise(resolve => {
-    canvas.toBlob(blob => resolve(blob), 'image/jpeg', 0.90);
+  return new Promise(function(resolve) {
+    canvas.toBlob(function(blob) { resolve(blob); }, 'image/jpeg', 0.90);
   });
 }
 
-// âââ ANALYZE âââ
-async function captureAndAnalyze() {
+// ═══ ANALYZE ═══
+function captureAndAnalyze() {
   goTo('analyze');
-
-  try {
-    const photoBlob = await capturePhoto();
+  capturePhoto().then(function(photoBlob) {
     markStep('stepUpload', 'done');
     markStep('stepSurvey', 'active');
 
-    let result;
     if (CONFIG.mockMode) {
-      result = await mockAnalysis();
+      return mockAnalysis();
     } else {
-      result = await liveAnalysis(photoBlob);
+      return liveAnalysis(photoBlob);
     }
-
+  }).then(function(result) {
     showResults(result);
     goTo('results');
     startIdleTimer();
-
-  } catch (e) {
+  }).catch(function(e) {
     console.error('Analysis failed:', e);
     document.getElementById('errorDetail').textContent = e.message || 'Analysis failed. Please try again.';
     goTo('error');
-  }
+  });
 }
 
 function markStep(id, cls) {
-  const el = document.getElementById(id);
+  var el = document.getElementById(id);
   if (el) el.className = cls;
 }
 
-// âââ LIVE API âââ
-async function liveAnalysis(photoBlob) {
-  const form = new FormData();
+// ═══ LIVE API ═══
+function liveAnalysis(photoBlob) {
+  var form = new FormData();
   form.append('front', photoBlob, 'front.jpg');
   form.append('left', photoBlob, 'left.jpg');
   form.append('right', photoBlob, 'right.jpg');
 
-  const uploadRes = await fetch(`${CONFIG.apiBase}/api/analysis-jobs`, { method: 'POST', body: form });
-  if (!uploadRes.ok) throw new Error('Photo upload failed');
-  const uploadData = await uploadRes.json();
-  const jobId = uploadData.jobId;
-
-  markStep('stepSurvey', 'done');
-  markStep('stepAI', 'active');
-
-  const surveyRes = await fetch(`${CONFIG.apiBase}/api/analysis-jobs/${jobId}/survey`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      concerns: JSON.stringify(['Rough and Bumpy Texture', 'Dehydration']),
-      pregnantOrBreastfeeding: 'no',
-      ageRange: '', fitzpatrick: '', gender: '',
-      zoneFeel: { tZone: '', cheeks: '', chin: '' },
-      ingredientSensitivities: JSON.stringify([]),
-      breakoutFrequency: '',
-      currentPrescriptions: JSON.stringify([]),
-      currentRoutineProducts: JSON.stringify([]),
-      routinePreference: ''
+  var jobId;
+  return fetch(CONFIG.apiBase + '/api/analysis-jobs', { method: 'POST', body: form })
+    .then(function(res) { if (!res.ok) throw new Error('Photo upload failed'); return res.json(); })
+    .then(function(data) {
+      jobId = data.jobId;
+      markStep('stepSurvey', 'done');
+      markStep('stepAI', 'active');
+      return fetch(CONFIG.apiBase + '/api/analysis-jobs/' + jobId + '/survey', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          concerns: JSON.stringify(['Rough and Bumpy Texture', 'Dehydration']),
+          pregnantOrBreastfeeding: 'no',
+          ageRange: '', fitzpatrick: '', gender: '',
+          zoneFeel: { tZone: '', cheeks: '', chin: '' },
+          ingredientSensitivities: JSON.stringify([]),
+          breakoutFrequency: '',
+          currentPrescriptions: JSON.stringify([]),
+          currentRoutineProducts: JSON.stringify([]),
+          routinePreference: ''
+        })
+      });
     })
-  });
-  if (!surveyRes.ok) throw new Error('Survey submission failed');
-
-  const runRes = await fetch(`${CONFIG.apiBase}/api/analysis-jobs/${jobId}/run-analysis`, { method: 'POST' });
-  if (!runRes.ok) throw new Error('Analysis failed');
-  const runData = await runRes.json();
-
-  markStep('stepAI', 'done');
-  markStep('stepResults', 'active');
-
-  return runData.result || runData;
+    .then(function(res) { if (!res.ok) throw new Error('Survey submission failed'); return res.json(); })
+    .then(function() {
+      return fetch(CONFIG.apiBase + '/api/analysis-jobs/' + jobId + '/run-analysis', { method: 'POST' });
+    })
+    .then(function(res) { if (!res.ok) throw new Error('Analysis failed'); return res.json(); })
+    .then(function(data) {
+      markStep('stepAI', 'done');
+      markStep('stepResults', 'active');
+      return data.result || data;
+    });
 }
 
-// âââ MOCK ANALYSIS âââ
+// ═══ MOCK ANALYSIS ═══
 function mockAnalysis() {
-  return new Promise(resolve => {
-    setTimeout(() => { markStep('stepSurvey', 'done'); markStep('stepAI', 'active'); }, 800);
-    setTimeout(() => { markStep('stepAI', 'done'); markStep('stepResults', 'active'); }, 2200);
-    setTimeout(() => {
+  return new Promise(function(resolve) {
+    setTimeout(function() { markStep('stepSurvey', 'done'); markStep('stepAI', 'active'); }, 800);
+    setTimeout(function() { markStep('stepAI', 'done'); markStep('stepResults', 'active'); }, 2200);
+    setTimeout(function() {
       resolve({
         skin_type_title: 'Combination with Visible Dryness',
         baumann_type: 'DSPW',
@@ -707,62 +671,80 @@ function mockAnalysis() {
   });
 }
 
-// âââ RESULTS RENDERER âââ
+// ═══ RESULTS RENDERER ═══
 function showResults(data) {
-  const grid = document.getElementById('resultsGrid');
-  const summary = document.getElementById('resultsSummary');
+  var grid = document.getElementById('resultsGrid');
+  var summary = document.getElementById('resultsSummary');
   summary.textContent = data.high_level_summary || data.summary || '';
 
-  const facial = data.recommended_facial || {};
-  const addons = data.recommended_add_ons || [];
-  const products = data.recommended_products || [];
+  var facial = data.recommended_facial || {};
+  var addons = data.recommended_add_ons || [];
+  var products = data.recommended_products || [];
 
-  const qrUrl = `${CONFIG.webAppUrl}?mirrosa_source=kiosk`;
-  const qr = qrcode(0, 'M');
+  var qrUrl = CONFIG.webAppUrl + '?mirrosa_source=kiosk';
+  var qr = qrcode(0, 'M');
   qr.addData(qrUrl);
   qr.make();
-  const qrImg = qr.createDataURL(6, 0);
+  var qrImg = qr.createDataURL(6, 0);
 
-  grid.innerHTML = `
-    <div class="result-card featured">
-      <div>
-        <div class="card-label">Recommended Facial</div>
-        <div class="card-title">${facial.name || 'Signature Facial'}</div>
-        <div class="card-price">$${facial.price || 119}</div>
-        <div class="card-reason">${facial.reason || ''}</div>
-      </div>
-      <div>
-        <div class="card-label">Why We Recommend</div>
-        <p class="card-reason">${facial.why_recommend_summary || ''}</p>
-        ${facial.why_recommend_bullets ? `<ul class="card-bullets">${facial.why_recommend_bullets.map(b => `<li>${b}</li>`).join('')}</ul>` : ''}
-      </div>
-    </div>
-    <div class="result-card">
-      <div class="card-label">Recommended Add-Ons</div>
-      ${addons.map(a => `<div class="addon-item"><div class="addon-name">${a.name}</div><div class="addon-price">+$${a.price}</div><div class="addon-reason">${a.reason || ''}</div></div>`).join('')}
-    </div>
-    <div class="result-card">
-      <div class="card-label">Recommended Products</div>
-      ${products.map(p => `<div class="addon-item"><div class="addon-name">${p.name}</div><div class="addon-price">$${p.price}</div><div class="addon-reason">${p.reason || ''}</div></div>`).join('')}
-    </div>
-    <div class="result-card qr-section">
-      <div class="qr-box"><img src="${qrImg}" width="140" height="140" alt="QR Code"></div>
-      <div class="qr-text"><h3>Take Your Results With You</h3><p>Scan this code to view your full analysis on your phone, save your results, and book your perfect facial.</p></div>
-    </div>
-  `;
+  var html = '';
+
+  // Featured facial card
+  html += '<div class="result-card featured"><div>';
+  html += '<div class="card-label">Recommended Facial</div>';
+  html += '<div class="card-title">' + (facial.name || 'Signature Facial') + '</div>';
+  html += '<div class="card-price">$' + (facial.price || 119) + '</div>';
+  html += '<div class="card-reason">' + (facial.reason || '') + '</div>';
+  html += '</div><div>';
+  html += '<div class="card-label">Why We Recommend</div>';
+  html += '<p class="card-reason">' + (facial.why_recommend_summary || '') + '</p>';
+  if (facial.why_recommend_bullets && facial.why_recommend_bullets.length) {
+    html += '<ul class="card-bullets">';
+    for (var b = 0; b < facial.why_recommend_bullets.length; b++) {
+      html += '<li>' + facial.why_recommend_bullets[b] + '</li>';
+    }
+    html += '</ul>';
+  }
+  html += '</div></div>';
+
+  // Add-ons card
+  html += '<div class="result-card"><div class="card-label">Recommended Add-Ons</div>';
+  for (var a = 0; a < addons.length; a++) {
+    html += '<div class="addon-item"><div class="addon-name">' + addons[a].name + '</div>';
+    html += '<div class="addon-price">+$' + addons[a].price + '</div>';
+    html += '<div class="addon-reason">' + (addons[a].reason || '') + '</div></div>';
+  }
+  html += '</div>';
+
+  // Products card
+  html += '<div class="result-card"><div class="card-label">Recommended Products</div>';
+  for (var p = 0; p < products.length; p++) {
+    html += '<div class="addon-item"><div class="addon-name">' + products[p].name + '</div>';
+    html += '<div class="addon-price">$' + products[p].price + '</div>';
+    html += '<div class="addon-reason">' + (products[p].reason || '') + '</div></div>';
+  }
+  html += '</div>';
+
+  // QR code card
+  html += '<div class="result-card qr-section">';
+  html += '<div class="qr-box"><img src="' + qrImg + '" width="140" height="140" alt="QR Code"></div>';
+  html += '<div class="qr-text"><h3>Take Your Results With You</h3>';
+  html += '<p>Scan this code to view your full analysis on your phone, save your results, and book your perfect facial.</p></div></div>';
+
+  grid.innerHTML = html;
 }
 
-// âââ IDLE TIMER âââ
+// ═══ IDLE TIMER ═══
 function startIdleTimer() {
-  const timerEl = document.getElementById('resultsTimer');
-  const total = CONFIG.idleTimeout;
-  let elapsed = 0;
+  var timerEl = document.getElementById('resultsTimer');
+  var total = CONFIG.idleTimeout;
+  var elapsed = 0;
   timerEl.style.width = '100%';
 
   clearInterval(idleTimer);
-  idleTimer = setInterval(() => {
+  idleTimer = setInterval(function() {
     elapsed += 1000;
-    timerEl.style.width = `${Math.max(0, 100 - (elapsed / total * 100))}%`;
+    timerEl.style.width = Math.max(0, 100 - (elapsed / total * 100)) + '%';
     if (elapsed >= total) {
       clearInterval(idleTimer);
       goTo('attract');
@@ -770,8 +752,8 @@ function startIdleTimer() {
   }, 1000);
 }
 
-// âââ CONFIG BAR âââ
-document.addEventListener('keydown', e => {
+// ═══ CONFIG BAR ═══
+document.addEventListener('keydown', function(e) {
   if (e.key === 'c' || e.key === 'C') {
     document.getElementById('configBar').classList.toggle('visible');
   }
@@ -781,77 +763,43 @@ document.addEventListener('keydown', e => {
 });
 
 document.getElementById('cfgMode').addEventListener('change', function() {
-  const badge = document.getElementById('modeBadge');
+  var badge = document.getElementById('modeBadge');
   badge.textContent = this.value === 'mock' ? 'MOCK' : 'LIVE';
   badge.className = this.value === 'mock' ? 'badge mock' : 'badge live';
 });
 
-// âââ BOOT âââ
-async function boot() {
-  const bar = document.getElementById('loadingBar');
-  const status = document.getElementById('loadingStatus');
-  const faceBadge = document.getElementById('faceBadge');
+// ═══ BOOT ═══
+function boot() {
+  var bar = document.getElementById('loadingBar');
+  var status = document.getElementById('loadingStatus');
+  var faceBadge = document.getElementById('faceBadge');
 
-  try {
-    // Load MediaPipe face detection
-   try {
-      await Promise.race([
-        initMediaPipe((msg, pct) => {
-          status.textContent = msg;
-          bar.style.width = pct + '%';
-        }),
-        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), 15000))
-      ]);
-      function detectFace(video) { = 'FACE: MediaPipe';
-      faceBadge.style.background = '#22c55e';
-    } catch(e) {
-      console.warn('MediaPipe failed, using motion detection fallback:', e.message);
-      landmarker = null;
-      function detectFace(video) { = 'FACE: motion';
-      faceBadge.style.background = '#f59e0b';
-    }
+  status.textContent = 'Starting camera...';
+  bar.style.width = '30%';
 
-  
+  startCamera().then(function() {
+    bar.style.width = '80%';
+    status.textContent = 'Camera ready...';
+    faceBadge.textContent = 'FACE: motion';
+    faceBadge.style.background = '#22c55e';
 
-    // Start camera
-    status.textContent = 'Starting camera...';
-    bar.style.width = '90%';
-    await startCamera();
-
-    // Small delay for camera to warm up
-    await new Promise(r => setTimeout(r, 500));
-
+    return new Promise(function(r) { setTimeout(r, 500); });
+  }).then(function() {
     bar.style.width = '100%';
     status.textContent = 'Ready!';
-
-    // Transition to attract
-    await new Promise(r => setTimeout(r, 500));
+    return new Promise(function(r) { setTimeout(r, 500); });
+  }).then(function() {
     goTo('attract');
-
-    console.log(`
-    âââââââââââââââââââââââââââââââââââââââââââ
-    â  SILVER SIDEWALK KIOSK â v1.0           â
-    â                                         â
-    â  Face Detection: MediaPipe FaceLandmark â
-    â  Mode: ${CONFIG.mockMode ? 'Mock' : 'Live API'}                           â
-    â                                         â
-    â  Press C     â config panel             â
-    â  Press SPACE â advance state            â
-    â  Press ESC   â reset to attract         â
-    âââââââââââââââââââââââââââââââââââââââââââ
-    `);
-
-  } catch (e) {
+    console.log('SILVER SIDEWALK KIOSK v1.1 — Motion Detection — Ready');
+  }).catch(function(e) {
     console.error('Boot failed:', e);
-    status.textContent = 'Failed to load: ' + e.message;
+    status.textContent = 'Camera failed: ' + e.message;
     bar.style.width = '100%';
     bar.style.background = '#ef4444';
-    function detectFace(video) { = 'FACE: FAILED';
+    faceBadge.textContent = 'FACE: FAILED';
     faceBadge.style.background = '#ef4444';
-
-    // Still allow manual operation via Space key
-    setTimeout(() => goTo('attract'), 3000);
-  }
+    setTimeout(function() { goTo('attract'); }, 3000);
+  });
 }
 
 boot();
